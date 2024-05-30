@@ -38,7 +38,7 @@ impl<'a> From<HttpResponse<'a>> for String {
 }
 
 impl<'a> HttpResponse<'a> {
-    fn new(
+    pub fn new(
         status_code: &'a str,
         headers: Option<HashMap<&'a str, &'a str>>,
         body: Option<String>,
@@ -67,7 +67,7 @@ impl<'a> HttpResponse<'a> {
         response
     }
 
-    fn send_response(&self, write_stream: &mut impl Write) -> Result<()> {
+    pub fn send_response(&self, write_stream: &mut impl Write) -> Result<()> {
         let res = self.clone();
         let response_string: String = String::from(res);
         let _ = write!(write_stream, "{}", response_string);
@@ -154,5 +154,6 @@ mod tests {
         };
         let http_string: String = response_expected.into();
         let actual_string = "HTTP/1.1 404 Not Found\r\nContent-Type:text/html\r\nContent-Length: 4\r\n\r\nzxzx";
+        assert_eq!(http_string,actual_string);
     }
 }
